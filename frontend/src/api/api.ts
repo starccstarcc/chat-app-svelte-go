@@ -1,36 +1,28 @@
-const BASE_URL = 'http://localhost:3000';
-
+import { PUBLIC_API_KEY } from '$env/static/public';
 import axios from 'axios';
 
-import { PUBLIC_API_KEY } from '$env/static/public';
+const BASE_URL = `https://api.weatherapi.com/v1/current.json?key=${PUBLIC_API_KEY}`;
 
-console.log('PUBLIC_API_KEY', PUBLIC_API_KEY);
-
-const options = {
-	method: 'GET',
-	url: 'https://weatherapi-com.p.rapidapi.com/current.json',
-	params: { q: '53.1,-0.13' },
-	headers: {
-		// need key
-		'X-RapidAPI-Key': PUBLIC_API_KEY,
-		'X-RapidAPI-Host': 'weatherapi-com.p.rapidapi.com'
-	}
+type weatherApiOptions = {
+	city: string;
 };
 
-try {
-	const response = await axios.request(options);
-	console.log(response.data);
-} catch (error) {
-	console.error(error);
+function generateUrl({ city }: weatherApiOptions) {
+	return `${BASE_URL}&q=${city}&aqi=no`;
 }
 
 const api = {
-	get: async () => {
+	get: async ({ city }: weatherApiOptions) => {
 		try {
+			const options = {
+				method: 'GET',
+				url: generateUrl({ city })
+			};
 			const response = await axios.request(options);
 			return await response.data;
 		} catch (error) {
-			return [];
+			console.log(`ERROR API CALL : `, error);
+			return {};
 		}
 	}
 };

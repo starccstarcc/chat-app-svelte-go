@@ -14,11 +14,7 @@
 		return ((n % m) + m) % m;
 	}
 
-  $: {
-    api.get().then((res) => {
-      console.log(res);
-    });
-  }
+
 </script>
 
 <div class="counter">
