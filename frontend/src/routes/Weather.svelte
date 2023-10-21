@@ -1,5 +1,6 @@
 <script>
 	import { api } from "../api/api";
+	import { formatJSON, formatValuesIntoString } from "../utils/json";
 
 
 	const weatherData = api.get({city : 'Goya'})
@@ -8,8 +9,8 @@
 {#await weatherData}
 	<h1>...waiting</h1>
 {:then data}
-{#each Object.entries(data) as [key, value], i}
-    <p>{key} : {JSON.stringify(value)}</p>
+{#each Object.values(data) as value}
+    <p>{formatValuesIntoString(value)}</p>
 {/each}
 
 {:catch error}
