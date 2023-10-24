@@ -6,10 +6,13 @@ import (
 )
 
 func main() {
-	inicializeFiberServer()
+	inicializeFiberSersssvessrs()
+	inicializeFiberSersssvessrs()
+	inicializeFiberSersssvessrs()
+	inicializeFiberSersssvessrs()
 }
 
-func inicializeFiberServer() {
+func inicializeFiberSersssvessrs() {
 
 	app := fiber.New()
 
