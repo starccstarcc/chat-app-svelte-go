@@ -1,6 +1,8 @@
 package store
 
-import "database/sql"
+import (
+	"database/sql"
+)
 
 func ConnectToDB(driver string, dns string) (*sql.DB, error) {
 	db, err := sql.Open(driver, dns)

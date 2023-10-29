@@ -1,18 +1,29 @@
 package main
 
 import (
+	"github.com/aletomasella/svelte-go-chat/pkg/store"
+	"github.com/aletomasella/svelte-go-chat/pkg/store/postgres"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
-	inicializeFiberSersssvessrs()
-	inicializeFiberSersssvessrs()
-	inicializeFiberSersssvessrs()
-	// inicializeFiberSersssvessrs()
+	db, err := store.ConnectToDB("postgres", postgres.PostgresDNS)
+
+	if err != nil {
+		panic(err)
+	}
+
+	db.Ping()
+
+	print("Connected to DB")
+	// store := postgres.NewStore(db)
+
+	inicializeServer()
+
 }
 
-func inicializeFiberSersssvessrs() {
+func inicializeServer() {
 
 	app := fiber.New()
 
@@ -26,26 +37,6 @@ func inicializeFiberSersssvessrs() {
 		return c.SendString("Hello, World!")
 	})
 
-	app.Post("api/messages", handleMessages)
-
 	app.Listen(":3000")
 
-}
-
-func handleMessages(c *fiber.Ctx) error {
-	var data map[string]string
-
-	if err := c.BodyParser(&data); err != nil {
-		return c.Status(503).SendString(err.Error())
-	}
-
-	if data["name"] == "" {
-		data["name"] = "World"
-	}
-
-	data["message"] = "Hello, " + data["name"]
-
-	delete(data, "name")
-
-	return c.JSON(data)
 }
