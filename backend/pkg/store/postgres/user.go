@@ -29,3 +29,15 @@ func (q *postgresStore) CreateUser(user *domain.User) (*domain.User, error) {
 
 	return user, nil
 }
+
+func (q *postgresStore) GetUserByEmail(email string) (*domain.User, error) {
+	var user domain.User
+
+	err := q.db.QueryRow("SELECT id, email, password FROM users WHERE email = $1", email).Scan(&user.ID, &user.Email, &user.Password)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}

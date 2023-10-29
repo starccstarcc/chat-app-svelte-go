@@ -9,7 +9,7 @@ func main() {
 	inicializeFiberSersssvessrs()
 	inicializeFiberSersssvessrs()
 	inicializeFiberSersssvessrs()
-	inicializeFiberSersssvessrs()
+	// inicializeFiberSersssvessrs()
 }
 
 func inicializeFiberSersssvessrs() {
