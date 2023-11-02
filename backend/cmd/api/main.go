@@ -10,6 +10,22 @@ const (
 	Port = "3000"
 )
 
+func handleConnection(conn net.Conn) {
+	defer conn.Close()
+
+	fmt.Printf("New connection from %s\n", conn.RemoteAddr().String())
+
+	// Go All Format Types : https://pkg.go.dev/fmt
+
+	for i := 0; i < 1000; i++ {
+		conn.Write([]byte("Counting to 1000: " + fmt.Sprintf("%d", i) + "\n"))
+	}
+
+	conn.Write([]byte("Bye!\n"))
+
+	fmt.Printf("Connection from %s closed\n", conn.RemoteAddr().String())
+}
+
 func main() {
 	ln, err := net.Listen("tcp", ":"+Port)
 
@@ -28,9 +44,6 @@ func main() {
 			continue
 		}
 
-		fmt.Println("Connection accepted from", conn.RemoteAddr())
-		conn.Write([]byte("Hello, world!\n"))
-		conn.Close()
-		//go handleConnection(conn)
+		go handleConnection(conn)
 	}
 }
