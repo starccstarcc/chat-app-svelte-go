@@ -1,42 +1,36 @@
 package main
 
 import (
-	"github.com/aletomasella/svelte-go-chat/pkg/store"
-	"github.com/aletomasella/svelte-go-chat/pkg/store/postgres"
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
+	"fmt"
+	"net"
+	"os"
+)
+
+const (
+	Port = "3000"
 )
 
 func main() {
-	db, err := store.ConnectToDB("postgres", postgres.PostgresDNS)
+	ln, err := net.Listen("tcp", ":"+Port)
 
 	if err != nil {
-		panic(err)
+		fmt.Printf("ERROR: Trying to listen in port %s, but failed because of %s\n", Port, err)
+		os.Exit(1)
 	}
 
-	db.Ping()
+	fmt.Printf("Listening in port %s\n", Port)
 
-	print("Connected to DB")
-	// store := postgres.NewStore(db)
+	for {
+		conn, err := ln.Accept()
 
-	inicializeServer()
+		if err != nil {
+			fmt.Printf("ERROR: Trying to accept connection, but failed because of %s\n", err)
+			continue
+		}
 
-}
-
-func inicializeServer() {
-
-	app := fiber.New()
-
-	app.Use(cors.New(cors.ConfigDefault))
-
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Redirect("/api")
-	})
-
-	app.Get("/api", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
-
-	app.Listen(":3000")
-
+		fmt.Println("Connection accepted from", conn.RemoteAddr())
+		conn.Write([]byte("Hello, world!\n"))
+		conn.Close()
+		//go handleConnection(conn)
+	}
 }
