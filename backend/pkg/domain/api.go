@@ -1,6 +1,17 @@
 package domain
 
-import "time"
+import (
+	"net"
+	"time"
+)
+
+// This is the way tp declare enums in Go (Starts in 0)
+// IOTA means auto increment
+const (
+	ClientConnected MessageType = iota + 1
+	ClientDisconnected
+	MessageReceived
+)
 
 type User struct {
 	ID       int64  `json:"id"`
@@ -15,4 +26,17 @@ type Post struct {
 	Body      string    `json:"body"`
 	UserID    int64     `json:"user_id"`
 	CreatedAt time.Time `json:"created_at"`
+}
+
+type Client struct {
+	Conn        net.Conn
+	LastMessage time.Time
+}
+
+type MessageType int
+
+type Message struct {
+	Type MessageType
+	Body string
+	Conn net.Conn
 }
